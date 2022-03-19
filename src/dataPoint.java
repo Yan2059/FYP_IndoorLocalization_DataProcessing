@@ -51,7 +51,7 @@ public class dataPoint{
     // calculate similarity of two Wifi RSS list
     // for faster comparison, omitting the sqrt
     // for wifi signal that both point doesn't have: (x-y)^2 = (0-0)^2
-    int similarity(dataPoint thatDP){
+    int distance(dataPoint thatDP){
         int thisDPIndex = 0, thatDPIndex = 0;
         int similaritySqSum = 0;
         int Strength;

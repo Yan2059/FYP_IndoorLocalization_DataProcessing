@@ -1,8 +1,7 @@
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.Scanner;
+
 
 public class locationCheck {
     private static dataPoint checkPoint; // the unknown point
@@ -80,7 +79,7 @@ public class locationCheck {
 
         int k = 1;
         double centroidX = 0, centroidY = 0, centroidZ = 0;
-        pointList.sort(Comparator.comparingInt(p -> p.similarity(checkPoint)));
+        pointList.sort(Comparator.comparingInt(p -> p.distance(checkPoint)));
 
         for(int i = 0; i < k; i++){
             centroidX += pointList.get(i).location.x;
