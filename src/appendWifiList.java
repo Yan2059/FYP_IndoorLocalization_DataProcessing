@@ -4,37 +4,43 @@ import java.util.Collections;
 
 
 class appendWifiList {
+
     private static ArrayList<Wifi> wifiList = new ArrayList<>();
     private static ArrayList<position> posList = new ArrayList<>();
 
     static void readData() throws IOException{
-        File filename = new File("./data.txt");
-        InputStreamReader reader = new InputStreamReader(new FileInputStream(filename));
-        BufferedReader br = new BufferedReader(reader);
-        double x =  Double.parseDouble(br.readLine());
-        double y =  Double.parseDouble(br.readLine());
-        double z =  Double.parseDouble(br.readLine());
-        position pos = new position(x,y,z);
-        String line = br.readLine();
-        int lineNum = 0;
+        File filename = new File("./input");
+        File[] folder = filename.listFiles();
+        for(File file: folder){
+            InputStreamReader reader = new InputStreamReader(new FileInputStream(file));
+            BufferedReader br = new BufferedReader(reader);
+            double x =  Double.parseDouble(br.readLine());
+            double y =  Double.parseDouble(br.readLine());
+            double z =  Double.parseDouble(br.readLine());
+            position pos = new position(x,y,z);
+            String line = br.readLine();
+            int lineNum = 0;
 
-        while (line != null) {
-            lineNum++;
-            if (lineNum >= 1) {
-                String[] record = line.split(" ");
-                Wifi newWifi = new Wifi(record[1], record[2]);
-                wifiList.add(newWifi);
-                posList.add(pos);
+            while (line != null) {
+                lineNum++;
+                if (lineNum >= 1) {
+                    String[] record = line.split(" ");
+                    Wifi newWifi = new Wifi(record[1], record[2]);
+                    wifiList.add(newWifi);
+                    posList.add(pos);
+                }
+                line = br.readLine();
             }
-            line = br.readLine();
+            br.close();
         }
-        br.close();
+
     }
 
     public static void main(String[] args) throws IOException{
         readData();
-        Collections.sort(wifiList, Collections.reverseOrder());
+        //Collections.sort(wifiList, Collections.reverseOrder());
         for(int i = 0; i < wifiList.size(); i++){
+            System.out.println(posList.get(i));
             System.out.println(wifiList.get(i));
         }
         File file =new File("./data.csv");

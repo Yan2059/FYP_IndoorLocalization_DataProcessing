@@ -1,72 +1,95 @@
 import java.util.ArrayList;
-import java.util.Collection;
 
-public class dataPoint {
+public class dataPoint{
     position location;
-    public static ArrayList<Wifi> wifiList = new ArrayList<>();
-    dataPoint(position point, ArrayList<Wifi> list){
-        location = point;
-        wifiList = list;
-    }
-    //calculate similarity of two Wifi RSS list
-    double similarity(dataPoint point){
-        double sim;
-        ArrayList<Wifi> unique = createUniqueList(point);
-        ArrayList<Integer> vector1 = new ArrayList<Integer>();
-        ArrayList<Integer> vector2 = new ArrayList<Integer>();
-        for(int i=0;i<unique.size();i++){
-            if(findById(wifiList, unique.get(i).getId()).getId().equals(wifiList.get(i).getId())){
-                vector1.add(wifiList.get(i).getStrength());
-            }
-            else{
-                vector1.add(0);
-            }
-            if(findById(point.wifiList, unique.get(i).getId()).getId().equals(point.wifiList.get(i).getId())){
-                vector2.add(wifiList.get(i).getStrength());
-            }
-            else{
-                vector2.add(0);
-            }
+    ArrayList<Wifi> wifi = new ArrayList<>();
 
-        }
-        sim = calculateDistance(vector1,vector2);
-        return sim;
-    }
-    //find and add all unique Wifi of two datapoint
-    ArrayList<Wifi> createUniqueList(dataPoint point){
-        ArrayList<Wifi> wifiVector = new ArrayList<>(); //wifi vector storing unique wifi
-        //for loop to scan through this wifi add new wifi
-        for(int i=0;i<wifiList.size();i++){
-            String tempId = wifiList.get(i).getId();
-            if(point.wifiList.stream()
-                    .anyMatch(p -> p.getId().equals(tempId))&& !(wifiVector.stream()
-                    .anyMatch(p -> p.getId().equals(tempId)))){
-                wifiVector.add(wifiList.get(i));
-            }
-        }
-        //for loop to scan through the target and add new wifi
-        for(int i=0;i<point.wifiList.size();i++){
-            String tempId = point.wifiList.get(i).getId();
-            if(wifiList.stream()
-                    .anyMatch(p -> p.getId().equals(tempId))&& !(wifiVector.stream()
-                    .anyMatch(p -> p.getId().equals(tempId)))){
-                wifiVector.add(point.wifiList.get(i));
-            }
-        }
-        return wifiVector;
-    }
-    public static Wifi findById(Collection<Wifi> list, String id) {
-        return list.stream().filter(wifi -> id.equals(wifi.getId())).findFirst().orElse(null);
+    dataPoint(position pos){
+        location = new position(pos.x,pos.y,pos.z);
     }
 
-    //Euclidean distance calculation of two Wifi RSS vector
-    public static double calculateDistance(ArrayList<Integer> v1, ArrayList<Integer> v2)
-    {
-        double Sum = 0.0;
-        for(int i=0;i<v1.size();i++) {
-            Sum = Sum + Math.pow((v1.get(i)-v2.get(i)),2.0);
-        }
-        return Math.sqrt(Sum);
+    //by default if position is not provided, assume 0 0 0
+    dataPoint(){
+        location = new position(0,0,0);
     }
 
+    void setPoint(double x, double y, double z){
+        location = new position(x,y,z);
+    }
+
+    void setPoint(position pos){
+        location = new position(pos.x,pos.y,pos.z);
+    }
+
+    void addWifi(String id, String strength){
+        wifi.add(new Wifi(id, strength));
+    }
+
+    void sortByWifiID(){
+        this.wifi.sort((a, b) -> {
+            return a.getID().compareTo(b.getID());
+        });
+    }
+
+    private int compareBYID(int thisIndex, int thatIndex, dataPoint thatDP){
+        if (this.wifi.size() <= thisIndex){
+            // this reach the end but that doesn't
+            // meaning: that wifi is sth this doesn't have
+            return 1;
+        } else if (thatDP.wifi.size() <= thatIndex){
+            return -1;
+        }
+
+        return this.wifi.get(thisIndex).getID().compareTo(thatDP.wifi.get(thatIndex).getID());
+    }
+
+    private int distance(int thisIndex, int thatIndex, dataPoint thatDP){
+        int diff = thatDP.wifi.get(thatIndex).getStrength() - this.wifi.get(thisIndex).getStrength();
+        return diff * diff;
+    }
+
+    // calculate similarity of two Wifi RSS list
+    // for faster comparison, omitting the sqrt
+    // for wifi signal that both point doesn't have: (x-y)^2 = (0-0)^2
+    int similarity(dataPoint thatDP){
+        int thisDPIndex = 0, thatDPIndex = 0;
+        int similaritySqSum = 0;
+        int Strength;
+        for (; thisDPIndex < this.wifi.size() || thatDPIndex < thatDP.wifi.size();){
+            int compare = compareBYID(thisDPIndex, thatDPIndex, thatDP);
+            if (compare == 0){
+                // both point are the same
+                similaritySqSum += distance(thisDPIndex, thatDPIndex, thatDP);
+                thisDPIndex++;
+                thatDPIndex++;
+            } else if (compare < 0){
+                // this wifiID < that wifiID
+                // meaning: this wifi is sth that doesn't have
+                Strength = this.wifi.get(thisDPIndex).getStrength();
+                similaritySqSum += Strength*Strength;
+                thisDPIndex++;
+            } else {
+                // this wifiID > that wifiID
+                // meaning: that wifi is sth this doesn't have
+                Strength = thatDP.wifi.get(thatDPIndex).getStrength();
+                similaritySqSum += Strength*Strength;
+                thatDPIndex++;
+            }
+        }
+        System.out.println(similaritySqSum);
+        System.out.println("Coordinate: "+location.x+" "+location.y+" "+location.z);
+        return similaritySqSum;
+    }
+
+    @Override
+    public String toString(){
+        String result = "";
+        result += "Location: ";
+        result += location.toString();
+        for(Wifi w : wifi){
+            result += "\n\twifi: ";
+            result += w.toString();
+        }
+        return result;
+    }
 }

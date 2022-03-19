@@ -7,6 +7,10 @@ class Wifi implements Comparable<Wifi>{
         this.strength = Integer.parseInt(strength);
     }
 
+    public String getID(){
+        return id;
+    }
+
     @Override
     public int compareTo(Wifi o){
         return strength.compareTo(o.strength);
