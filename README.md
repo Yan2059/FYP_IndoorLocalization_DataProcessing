@@ -2,7 +2,9 @@
 
 ## Introduction
 
-This Java program is used for our FYP project: Indoor Localization Using Crowd Sourced Data (WA01)
+This Java program is used for our FYP project: Indoor Localization Using Crowd Sourced Data (WA01)</br>
+For data collection, please visit [FYP_IndoorLocalization_WifiRssCollection
+](https://github.com/Yan2059/FYP_IndoorLocalization_WifiRssCollection)
 While the Java program have the following function
 - Read and append WiFi RSS fingerprint collected in different location (Please visit [FYP_IndoorLocalization_WifiRssCollection](https://github.com/Yan2059/FYP_IndoorLocalization_WifiRssCollection))
 - Calculate the coordinate of an unknown point using WiFi RSS fingerprint
