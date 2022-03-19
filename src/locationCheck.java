@@ -8,7 +8,7 @@ public class locationCheck {
     private static ArrayList<dataPoint> pointList = new ArrayList<>();
 
     static void readPoint() throws IOException {
-        File filename = new File("./point.txt");
+        File filename = new File("./point.csv");
         InputStreamReader reader = new InputStreamReader(new FileInputStream(filename));
         BufferedReader br = new BufferedReader(reader);
         String line = br.readLine();
@@ -19,8 +19,8 @@ public class locationCheck {
         while (line != null) {
             lineNum++;
             if (lineNum >= 1) {
-                String[] record = line.split(" ");
-                checkPoint.addWifi(record[1], record[2]);
+                String[] record = line.split(",");
+                checkPoint.addWifi(record[0], record[1]);
             }
             line = br.readLine();
         }
@@ -77,7 +77,7 @@ public class locationCheck {
         readCSV();
         System.out.println("Stored data read");
 
-        int k = 1;
+        int k = 3;
         double centroidX = 0, centroidY = 0, centroidZ = 0;
         pointList.sort(Comparator.comparingInt(p -> p.distance(checkPoint)));
 

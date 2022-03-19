@@ -24,7 +24,7 @@ class appendWifiList {
             while (line != null) {
                 lineNum++;
                 if (lineNum >= 1) {
-                    String[] record = line.split(" ");
+                    String[] record = line.split(",");
                     Wifi newWifi = new Wifi(record[0], record[1]);
                     wifiList.add(newWifi);
                     posList.add(pos);
