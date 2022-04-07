@@ -6,37 +6,7 @@ import java.util.Comparator;
 public class localization {
     private static dataPoint checkPoint; // the unknown point
     private static ArrayList<dataPoint> pointList = new ArrayList<>();
-    private static ArrayList<Double> errorDist = new ArrayList<>();
-    private static ArrayList<Double> WerrorDist = new ArrayList<>();
     static position pos;
-    static double error[] = new double [11];
-    static double WeightError[] = new double [11];
-
-    static void readPoint() throws IOException {
-        File filename = new File("./testB.csv");
-        InputStreamReader reader = new InputStreamReader(new FileInputStream(filename));
-        BufferedReader br = new BufferedReader(reader);
-
-        int lineNum = 0;
-        double x =  Double.parseDouble(br.readLine());
-        double y =  Double.parseDouble(br.readLine());
-        double z =  Double.parseDouble(br.readLine());
-        pos = new position(x,y,z);
-        String line = br.readLine();
-        checkPoint = new dataPoint();
-
-
-        while (line != null) {
-            lineNum++;
-            if (lineNum >= 1) {
-                String[] record = line.split(",");
-                checkPoint.addWifi(record[0], record[1]);
-            }
-            line = br.readLine();
-        }
-        checkPoint.sortByWifiID();
-        br.close();
-    }
 
     static private boolean sameAsLastDataPoint(position newPosition){
         if (pointList.size() == 0) return false;
@@ -82,7 +52,7 @@ public class localization {
 
     public static void main(String[] args) throws IOException {
         readCSV();
-        File file = new File("./testC.csv");
+        File file = new File("./testA.csv");
             InputStreamReader reader = new InputStreamReader(new FileInputStream(file));
             BufferedReader br = new BufferedReader(reader);
             int lineNum = 0;
@@ -118,7 +88,6 @@ public class localization {
                     WcentroidY += pointList.get(i).location.y/dist;
                     WcentroidZ += pointList.get(i).location.z/dist;
                     denom+=1/dist;
-                    System.out.println(dist);
                 }
 
                 centroidX/=k;
@@ -128,6 +97,9 @@ public class localization {
                 WcentroidY/=denom;
                 WcentroidZ/=denom;
                 System.out.println("k= "+k);
+                System.out.println("Labeled X coordinate: "+x);
+                System.out.println("Labeled Y coordinate: "+y);
+                System.out.println("Labeled Z coordinate: "+z);
                 System.out.println("X coordinate: "+centroidX);
                 System.out.println("Y coordinate: "+centroidY);
                 System.out.println("Z coordinate: "+centroidZ);

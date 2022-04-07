@@ -13,32 +13,6 @@ public class errorAnalysis {
     static double WeightError[] = new double [11];
     static int n = 0;
 
-    static void readPoint() throws IOException {
-        File filename = new File("./testB.csv");
-        InputStreamReader reader = new InputStreamReader(new FileInputStream(filename));
-        BufferedReader br = new BufferedReader(reader);
-
-        int lineNum = 0;
-        double x =  Double.parseDouble(br.readLine());
-        double y =  Double.parseDouble(br.readLine());
-        double z =  Double.parseDouble(br.readLine());
-        pos = new position(x,y,z);
-        String line = br.readLine();
-        checkPoint = new dataPoint();
-
-
-        while (line != null) {
-            lineNum++;
-            if (lineNum >= 1) {
-                String[] record = line.split(",");
-                checkPoint.addWifi(record[0], record[1]);
-            }
-            line = br.readLine();
-        }
-        checkPoint.sortByWifiID();
-        br.close();
-    }
-
     static private boolean sameAsLastDataPoint(position newPosition){
         if (pointList.size() == 0) return false;
         return pointList.get(pointList.size()-1).location.compareTo(newPosition);
@@ -122,7 +96,6 @@ public class errorAnalysis {
                     WcentroidY += pointList.get(i).location.y/dist;
                     WcentroidZ += pointList.get(i).location.z/dist;
                     denom+=1/dist;
-                    System.out.println(dist);
                 }
 
                 centroidX/=k;
