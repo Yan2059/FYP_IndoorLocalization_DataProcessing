@@ -27,7 +27,7 @@ To merge all data file collected/append new data point.
 To calculate coordinate of an unknown point, please prepare the following files:
 - data.csv from previous section
 - point.csv collected by [the App](https://github.com/Yan2059/FYP_IndoorLocalization_WifiRssCollection)
-2. Run the main method of locationCheck.java
+2. Run the main method of errorAnalysis.java
 
 ## Working Principle
 
@@ -45,7 +45,7 @@ To compare distance (difference in WiFi RSS vectors)
 ### Centroid of KNN points
 The method of prediction is to find the K point with largest similarity in WiFi RSS vectors.
 Finding the centroid of that K points for the x y z coordinate of the unknown point.
-**To modify the value of K, it is located in the main method of locationCheck.java**
+**To modify the value of K, it is located in the main method of errorAnalysis.java**
 
 
 

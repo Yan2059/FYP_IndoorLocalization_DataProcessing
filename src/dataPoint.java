@@ -4,6 +4,7 @@ public class dataPoint{
     position location;
     ArrayList<Wifi> wifi = new ArrayList<>();
 
+
     dataPoint(position pos){
         location = new position(pos.x,pos.y,pos.z);
     }
@@ -76,8 +77,6 @@ public class dataPoint{
                 thatDPIndex++;
             }
         }
-        System.out.println(similaritySqSum);
-        System.out.println("Coordinate: "+location.x+" "+location.y+" "+location.z);
         return similaritySqSum;
     }
 
