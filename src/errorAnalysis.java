@@ -19,7 +19,7 @@ public class errorAnalysis {
     }
 
     static void readCSV() throws IOException {
-        File filename = new File("./2F_data.csv");
+        File filename = new File("./2F_data_wName.csv");
         InputStreamReader reader = new InputStreamReader(new FileInputStream(filename));
         BufferedReader br = new BufferedReader(reader);
         br.readLine();
@@ -29,6 +29,7 @@ public class errorAnalysis {
         //point to store when reading
         dataPoint currentPoint = new dataPoint();
         String line = br.readLine();
+        String lastFile="";
 
         while (line != null) {
             lineNum++;
@@ -37,11 +38,12 @@ public class errorAnalysis {
                 double x= Double.parseDouble(splitLine[0]);
                 double y= Double.parseDouble(splitLine[1]);
                 double z= Double.parseDouble(splitLine[2]);
-
+                String newName = splitLine[5];
                 position newPosition = new position(x,y,z);
 
-                if(!sameAsLastDataPoint(newPosition) && lineNum!=1){
+                if(!lastFile.equals(newName) && lineNum!=1){
                     currentPoint = new dataPoint(newPosition);
+                    lastFile = newName;
                     pointList.add(currentPoint);
                 }
                 currentPoint.addWifi(splitLine[3], splitLine[4]);
@@ -126,13 +128,14 @@ public class errorAnalysis {
             }
             n++;
         }
-        for(int i=0;i<error.length;i++){
+        for(int i=1;i<error.length;i++){
             double avg = error[i]/n;
-            System.out.println("Avg error of k= "+(i)+" : "+avg);
+            System.out.println("Mean error distance of k= "+(i)+" : "+avg);
         }
-        for(int i=0;i<error.length;i++){
+        System.out.println();
+        for(int i=1;i<error.length;i++){
             double Wavg = WeightError[i]/n;
-            System.out.println("Avg error (weighted) of k= "+(i)+" : "+Wavg);
+            System.out.println("Mean error distance (weighted) of k= "+(i)+" : "+Wavg);
         }
 
     }

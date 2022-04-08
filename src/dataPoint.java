@@ -4,7 +4,6 @@ public class dataPoint{
     position location;
     ArrayList<Wifi> wifi = new ArrayList<>();
 
-
     dataPoint(position pos){
         location = new position(pos.x,pos.y,pos.z);
     }

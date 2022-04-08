@@ -22,7 +22,6 @@ class appendWifiList {
                 if (lineNum >= 1) {
                     String[] record = line.split(",");
                     Wifi newWifi = new Wifi(record[0], record[1]);
-                    if(Integer.parseInt(record[1])>-80)
                     wifiList.add(newWifi);
                 }
                 line = br.readLine();
@@ -34,12 +33,10 @@ class appendWifiList {
         File filename = new File("./input");
         File[] folder = filename.listFiles();
         for(File dPfile: folder){
+            String name = dPfile.getName();
             readData(dPfile);
             Collections.sort(wifiList, Collections.reverseOrder());
-            for(int i = 0; i < wifiList.size()&&i<10; i++){
-                System.out.println(wifiList.get(i));
-            }
-            File file =new File("./2F_data_80.csv");
+            File file =new File("./2F_data_wName.csv");
             StringBuilder sb = new StringBuilder();
             if(!file.exists()){
                 file.createNewFile();
@@ -52,9 +49,11 @@ class appendWifiList {
                 sb.append("Wifi ID");
                 sb.append(',');
                 sb.append("Wifi RSS");
+                sb.append(',');
+                sb.append("File name");
                 sb.append('\n');
             }
-            for(int i=0;i<wifiList.size()&&i<10;i++){
+            for(int i=0;i<wifiList.size();i++){
                 sb.append(x);
                 sb.append(',');
                 sb.append(y);
@@ -64,6 +63,8 @@ class appendWifiList {
                 sb.append(wifiList.get(i).getId());
                 sb.append(',');
                 sb.append(wifiList.get(i).getStrength());
+                sb.append(',');
+                sb.append(name);
                 sb.append('\n');
             }
             //Here true is to append the content to file

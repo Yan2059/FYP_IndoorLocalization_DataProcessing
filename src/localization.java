@@ -14,7 +14,7 @@ public class localization {
     }
 
     static void readCSV() throws IOException {
-        File filename = new File("./2F_data.csv");
+        File filename = new File("./2F_data_wName.csv");
         InputStreamReader reader = new InputStreamReader(new FileInputStream(filename));
         BufferedReader br = new BufferedReader(reader);
         br.readLine();
