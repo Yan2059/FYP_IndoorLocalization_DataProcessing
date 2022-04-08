@@ -45,7 +45,7 @@ public class dataPoint{
     }
 
     private int distance(int thisIndex, int thatIndex, dataPoint thatDP){
-        int diff = thatDP.wifi.get(thatIndex).getStrength() - this.wifi.get(thisIndex).getStrength();
+        int diff = (100-thatDP.wifi.get(thatIndex).getStrength()) - (100-this.wifi.get(thisIndex).getStrength());
         return diff * diff;
     }
 
@@ -66,13 +66,13 @@ public class dataPoint{
             } else if (compare < 0){
                 // this wifiID < that wifiID
                 // meaning: this wifi is sth that doesn't have
-                Strength = this.wifi.get(thisDPIndex).getStrength();
+                Strength = (100-this.wifi.get(thisDPIndex).getStrength());
                 similaritySqSum += Strength*Strength;
                 thisDPIndex++;
             } else {
                 // this wifiID > that wifiID
                 // meaning: that wifi is sth this doesn't have
-                Strength = thatDP.wifi.get(thatDPIndex).getStrength();
+                Strength = (100-thatDP.wifi.get(thatDPIndex).getStrength());
                 similaritySqSum += Strength*Strength;
                 thatDPIndex++;
             }
