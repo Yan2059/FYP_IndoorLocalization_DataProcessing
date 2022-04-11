@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class dataPoint{
     position location;
@@ -13,22 +14,16 @@ public class dataPoint{
         location = new position(0,0,0);
     }
 
-    void setPoint(double x, double y, double z){
-        location = new position(x,y,z);
-    }
-
-    void setPoint(position pos){
-        location = new position(pos.x,pos.y,pos.z);
-    }
-
     void addWifi(String id, String strength){
         wifi.add(new Wifi(id, strength));
     }
 
     void sortByWifiID(){
-        this.wifi.sort((a, b) -> {
-            return a.getID().compareTo(b.getID());
-        });
+        this.wifi.sort(Comparator.comparing(Wifi::getID));
+    }
+
+    void sortByWifiStrength(){
+        this.wifi.sort(Comparator.comparing(Wifi::getStrength));
     }
 
     private int compareBYID(int thisIndex, int thatIndex, dataPoint thatDP){

@@ -20,9 +20,7 @@ class Wifi implements Comparable<Wifi>{
     public String toString() {
         return id + " " + strength;
     }
-    public String getId(){
-        return id;
-    }
+
     public Integer getStrength(){
         return strength;
     }

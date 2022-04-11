@@ -52,7 +52,7 @@ public class localization {
 
     public static void main(String[] args) throws IOException {
         readCSV();
-        File file = new File("./testA.csv");
+        File file = new File("./test2Fcor.csv");
             InputStreamReader reader = new InputStreamReader(new FileInputStream(file));
             BufferedReader br = new BufferedReader(reader);
             int lineNum = 0;
@@ -73,7 +73,7 @@ public class localization {
             }
             checkPoint.sortByWifiID();
             br.close();
-            int k=2;
+            int k=4;
                 double centroidX = 0, centroidY = 0, centroidZ = 0;
                 double WcentroidX = 0, WcentroidY = 0, WcentroidZ = 0;
                 double denom=0;

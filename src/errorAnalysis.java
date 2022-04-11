@@ -90,7 +90,14 @@ public class errorAnalysis {
                 pointList.sort(Comparator.comparingInt(p -> p.distance(checkPoint)));
 
                 for(int i = 0; i < k; i++){
-                    double dist = pointList.get(i).distance(checkPoint)/10000;
+                    double dist;
+                    //handling small distance
+                    if(pointList.get(i).distance(checkPoint)<1000){
+                        dist = 1000/10000;
+                    }
+                    else{
+                        dist = pointList.get(i).distance(checkPoint)/10000;
+                    }
                     centroidX += pointList.get(i).location.x;
                     centroidY += pointList.get(i).location.y;
                     centroidZ += pointList.get(i).location.z;
@@ -120,11 +127,6 @@ public class errorAnalysis {
                 System.out.println("Error(weighted): "+Wpredict.distance(Wpredict,pos)*1.2);
                 error[k]+=predict.distance(predict,pos)*1.2;
                 WeightError[k]+=Wpredict.distance(Wpredict,pos)*1.2;
-                errorDist.add(predict.distance(predict,pos)*1.2);
-                if(k==2){
-                    WerrorDist.add(predict.distance(predict,pos)*1.2);
-                }
-
             }
             n++;
         }

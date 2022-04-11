@@ -16,16 +16,6 @@ public class position {
         return dist;
     }
 
-    public position centroid(position[] array)  {
-        double centroidX = 0, centroidY = 0, centroidZ = 0;
-        for(int i=0; i<array.length; i++) {
-            centroidX += array[i].x;
-            centroidY += array[i].y;
-            centroidZ += array[i].z;
-        }
-        return new position(centroidX / array.length, centroidY / array.length, centroidZ / array.length);
-    }
-
     public boolean compareTo(position point){
         if(Double.compare(point.x,x)==0 && Double.compare(point.y,y)==0 && Double.compare(point.z,z)==0 ){
             return true;

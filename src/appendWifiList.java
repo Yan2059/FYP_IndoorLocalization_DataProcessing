@@ -60,7 +60,7 @@ class appendWifiList {
                 sb.append(',');
                 sb.append(z);
                 sb.append(',');
-                sb.append(wifiList.get(i).getId());
+                sb.append(wifiList.get(i).getID());
                 sb.append(',');
                 sb.append(wifiList.get(i).getStrength());
                 sb.append(',');
