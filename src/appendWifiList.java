@@ -36,7 +36,7 @@ class appendWifiList {
             String name = dPfile.getName();
             readData(dPfile);
             Collections.sort(wifiList, Collections.reverseOrder());
-            File file =new File("./2F_data_wName.csv");
+            File file =new File("./2_3F_data_wName.csv");
             StringBuilder sb = new StringBuilder();
             if(!file.exists()){
                 file.createNewFile();

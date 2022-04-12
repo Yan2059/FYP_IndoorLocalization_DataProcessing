@@ -14,7 +14,7 @@ public class localization {
     }
 
     static void readCSV() throws IOException {
-        File filename = new File("./2F_data_wName.csv");
+        File filename = new File("./2_3F_data_wName.csv");
         InputStreamReader reader = new InputStreamReader(new FileInputStream(filename));
         BufferedReader br = new BufferedReader(reader);
         br.readLine();
@@ -24,6 +24,7 @@ public class localization {
         //point to store when reading
         dataPoint currentPoint = new dataPoint();
         String line = br.readLine();
+        String lastFile="";
 
         while (line != null) {
             lineNum++;
@@ -32,11 +33,12 @@ public class localization {
                 double x= Double.parseDouble(splitLine[0]);
                 double y= Double.parseDouble(splitLine[1]);
                 double z= Double.parseDouble(splitLine[2]);
-
+                String newName = splitLine[5];
                 position newPosition = new position(x,y,z);
 
-                if(!sameAsLastDataPoint(newPosition) && lineNum!=1){
+                if(!lastFile.equals(newName) && lineNum!=1){
                     currentPoint = new dataPoint(newPosition);
+                    lastFile = newName;
                     pointList.add(currentPoint);
                 }
                 currentPoint.addWifi(splitLine[3], splitLine[4]);
@@ -52,7 +54,7 @@ public class localization {
 
     public static void main(String[] args) throws IOException {
         readCSV();
-        File file = new File("./test2Fcor.csv");
+        File file = new File("./316855438761981.csv");
             InputStreamReader reader = new InputStreamReader(new FileInputStream(file));
             BufferedReader br = new BufferedReader(reader);
             int lineNum = 0;
@@ -73,7 +75,7 @@ public class localization {
             }
             checkPoint.sortByWifiID();
             br.close();
-            int k=4;
+            int k=3;
                 double centroidX = 0, centroidY = 0, centroidZ = 0;
                 double WcentroidX = 0, WcentroidY = 0, WcentroidZ = 0;
                 double denom=0;
@@ -93,9 +95,11 @@ public class localization {
                 centroidX/=k;
                 centroidY/=k;
                 centroidZ/=k;
+                centroidZ=Math.round(centroidZ);
                 WcentroidX/=denom;
                 WcentroidY/=denom;
                 WcentroidZ/=denom;
+                WcentroidZ=Math.round(WcentroidZ);
                 System.out.println("k= "+k);
                 System.out.println("Labeled X coordinate: "+x);
                 System.out.println("Labeled Y coordinate: "+y);
@@ -109,9 +113,9 @@ public class localization {
                 System.out.println("Z coordinate(weighted): "+WcentroidZ);
                 position predict = new position(centroidX,centroidY,centroidZ);
                 position Wpredict = new position(WcentroidX,WcentroidY,WcentroidZ);
-                System.out.println("Error: "+predict.distance(predict,pos)*1.2);
-                System.out.println("Error(weighted): "+Wpredict.distance(Wpredict,pos)*1.2);
-
+                System.out.println("Error: "+predict.distance(predict,pos));
+                System.out.println("Error(weighted): "+Wpredict.distance(Wpredict,pos));
+                canvas.output((int)z,(int)x,(int)y,(int)centroidX,(int)centroidY);
     }
 
 }

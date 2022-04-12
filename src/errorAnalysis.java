@@ -19,7 +19,7 @@ public class errorAnalysis {
     }
 
     static void readCSV() throws IOException {
-        File filename = new File("./2F_data_wName.csv");
+        File filename = new File("./2_3F_data_wName.csv");
         InputStreamReader reader = new InputStreamReader(new FileInputStream(filename));
         BufferedReader br = new BufferedReader(reader);
         br.readLine();
@@ -59,8 +59,10 @@ public class errorAnalysis {
 
     public static void main(String[] args) throws IOException {
         readCSV();
-        File filename = new File("./test");
+        File filename = new File("./test_23F");
         File[] folder = filename.listFiles();
+        int misMatch=0;
+        int numberOfPrediction=0;
         for(File file: folder){
             InputStreamReader reader = new InputStreamReader(new FileInputStream(file));
             BufferedReader br = new BufferedReader(reader);
@@ -110,24 +112,37 @@ public class errorAnalysis {
                 centroidX/=k;
                 centroidY/=k;
                 centroidZ/=k;
+                centroidZ=Math.round(centroidZ);
                 WcentroidX/=denom;
                 WcentroidY/=denom;
                 WcentroidZ/=denom;
+                WcentroidZ=Math.round(WcentroidZ);
                 System.out.println("k= "+k);
+                System.out.println("============= Labeled information ==============");
+                System.out.println("X coordinate: "+x);
+                System.out.println("Y coordinate: "+y);
+                System.out.println("Z coordinate: "+z);
+                System.out.println("============= Predicted information (KNN)==============");
                 System.out.println("X coordinate: "+centroidX);
                 System.out.println("Y coordinate: "+centroidY);
                 System.out.println("Z coordinate: "+centroidZ);
-                System.out.println("k(weighted)= "+k);
-                System.out.println("X coordinate(weighted): "+WcentroidX);
-                System.out.println("Y coordinate(weighted): "+WcentroidY);
-                System.out.println("Z coordinate(weighted): "+WcentroidZ);
+                System.out.println("============= Predicted information (WKNN)==============");
+                System.out.println("X coordinate: "+WcentroidX);
+                System.out.println("Y coordinate: "+WcentroidY);
+                System.out.println("Z coordinate: "+WcentroidZ);
                 position predict = new position(centroidX,centroidY,centroidZ);
                 position Wpredict = new position(WcentroidX,WcentroidY,WcentroidZ);
-                System.out.println("Error: "+predict.distance(predict,pos)*1.2);
-                System.out.println("Error(weighted): "+Wpredict.distance(Wpredict,pos)*1.2);
-                error[k]+=predict.distance(predict,pos)*1.2;
-                WeightError[k]+=Wpredict.distance(Wpredict,pos)*1.2;
+                System.out.println("Error: "+predict.distance(predict,pos));
+                System.out.println("Error(weighted): "+Wpredict.distance(Wpredict,pos));
+                if(centroidZ!=pos.z){
+                    System.out.println("FLOOR MISMATCHED!");
+                    misMatch++;
+                }
+                error[k]+=predict.distance(predict,pos);
+                WeightError[k]+=Wpredict.distance(Wpredict,pos);
+                numberOfPrediction++;
             }
+            System.out.println("///////////////Next prediction/////////////////");
             n++;
         }
         for(int i=1;i<error.length;i++){
@@ -139,7 +154,7 @@ public class errorAnalysis {
             double Wavg = WeightError[i]/n;
             System.out.println("Mean error distance (weighted) of k= "+(i)+" : "+Wavg);
         }
-
+    System.out.println(misMatch+" of prediction have floor mismatched, out of "+numberOfPrediction+" predictions");
     }
 
 }
