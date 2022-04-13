@@ -21,13 +21,30 @@ To merge all data file collected/append new data point.
   - x y z coordinate
   - WiFi SSID (WiFi ID)
   - WiFi RSS value (WiFi Strength)
+  - File name of original data file
 
 ### Calculate coordinate of an unknown point
 
 To calculate coordinate of an unknown point, please prepare the following files:
 - data.csv from previous section
-- point.csv collected by [the App](https://github.com/Yan2059/FYP_IndoorLocalization_WifiRssCollection)
-2. Run the main method of errorAnalysis.java
+- point.csv collected by [the App](https://github.com/Yan2059/FYP_IndoorLocalization_WifiRssCollection) and put into main directory
+
+Then,
+- Modify the value of K in the code
+- Run the main method of localization.java
+- The program will predict the coordinate using KNN and WKNN
+- Also generate a visual result using JPanel (Red: Labeled, Green: Predicted)
+
+### Calculate mean error distance of multiple testing points
+
+To calculate mean error distance of multiple testing points, please prepare the following files:
+- data.csv from previous section (Merge/append files)
+- Multiple point.csv collected by [the App](https://github.com/Yan2059/FYP_IndoorLocalization_WifiRssCollection) and put into the test folder
+
+Then,
+- Run the main method of errorAnalysis.java
+- The program will calculate mean error distance of different K values
+
 
 ## Working Principle
 
