@@ -2,7 +2,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-
 public class localization {
     private static dataPoint checkPoint; // the unknown point
     private static ArrayList<dataPoint> pointList = new ArrayList<>();

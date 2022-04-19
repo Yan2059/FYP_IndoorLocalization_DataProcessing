@@ -2,7 +2,6 @@ import java.util.ArrayList;
 import java.io.*;
 import java.util.Collections;
 
-
 class appendWifiList {
 
     private static ArrayList<Wifi> wifiList = new ArrayList<>();

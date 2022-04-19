@@ -12,10 +12,10 @@ public class drawPoint extends JPanel{
     static int y = 0;//labeled y coordinate
     static int xPre = 0;//predicted x coordinate
     static int yPre = 0;//predicted y coordinate
-    float offsetX = 3.0f;
-    float offsetY = 3.0f;
-    float scaleX = 7.2f;
-    float scaleY = 7.2f;
+    float offsetX = 3.0f;//shift the point in x axis
+    float offsetY = 3.0f;//shift the point in y axis
+    float scaleX = 7.2f;//change to match the scale in x axis
+    float scaleY = 7.2f;//change to match the scale in y axis
     drawPoint(int floorNum, int xPos, int yPos, int XprePos,int YprePos){
         floor=floorNum;
         x=xPos;
