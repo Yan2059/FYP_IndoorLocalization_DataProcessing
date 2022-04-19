@@ -6,12 +6,13 @@ import java.util.Comparator;
 public class errorAnalysis {
     private static dataPoint checkPoint; // the unknown point
     private static ArrayList<dataPoint> pointList = new ArrayList<>();
-    private static ArrayList<Double> errorDist = new ArrayList<>();
-    private static ArrayList<Double> WerrorDist = new ArrayList<>();
     static position pos;
     static double error[] = new double [11];
     static double WeightError[] = new double [11];
+    static int wrongFloor[] = new int [11];
     static int n = 0;
+    static File testFolder = new File("./test_23F_no13");//the testing point folder path
+    static File dbFile = new File("./db_no13.csv");//file path of the database csv file
 
     static private boolean sameAsLastDataPoint(position newPosition){
         if (pointList.size() == 0) return false;
@@ -19,8 +20,8 @@ public class errorAnalysis {
     }
 
     static void readCSV() throws IOException {
-        File filename = new File("./2_3F_data_wName.csv");
-        InputStreamReader reader = new InputStreamReader(new FileInputStream(filename));
+
+        InputStreamReader reader = new InputStreamReader(new FileInputStream(dbFile));
         BufferedReader br = new BufferedReader(reader);
         br.readLine();
         int lineNum = 0;
@@ -59,10 +60,9 @@ public class errorAnalysis {
 
     public static void main(String[] args) throws IOException {
         readCSV();
-        File filename = new File("./test_23F");
-        File[] folder = filename.listFiles();
-        int misMatch=0;
-        int numberOfPrediction=0;
+        File[] folder = testFolder.listFiles();
+        int misMatch=0;//counter of number of mismatched floor
+        int numberOfPrediction=0;//counter of total number of compare
         for(File file: folder){
             InputStreamReader reader = new InputStreamReader(new FileInputStream(file));
             BufferedReader br = new BufferedReader(reader);
@@ -92,13 +92,11 @@ public class errorAnalysis {
                 pointList.sort(Comparator.comparingInt(p -> p.distance(checkPoint)));
 
                 for(int i = 0; i < k; i++){
-                    double dist;
+                    double dist=0;
                     //handling small distance
-                    if(pointList.get(i).distance(checkPoint)<1000){
-                        dist = 1000/10000;
-                    }
-                    else{
-                        dist = pointList.get(i).distance(checkPoint)/10000;
+                    dist = pointList.get(i).distance(checkPoint)/10000;
+                    if(dist<1){
+                        dist=1;
                     }
                     centroidX += pointList.get(i).location.x;
                     centroidY += pointList.get(i).location.y;
@@ -126,17 +124,18 @@ public class errorAnalysis {
                 System.out.println("X coordinate: "+centroidX);
                 System.out.println("Y coordinate: "+centroidY);
                 System.out.println("Z coordinate: "+centroidZ);
+                position predict = new position(centroidX,centroidY,centroidZ);
+                System.out.println("Error: "+predict.distance(predict,pos));
                 System.out.println("============= Predicted information (WKNN)==============");
                 System.out.println("X coordinate: "+WcentroidX);
                 System.out.println("Y coordinate: "+WcentroidY);
                 System.out.println("Z coordinate: "+WcentroidZ);
-                position predict = new position(centroidX,centroidY,centroidZ);
                 position Wpredict = new position(WcentroidX,WcentroidY,WcentroidZ);
-                System.out.println("Error: "+predict.distance(predict,pos));
                 System.out.println("Error(weighted): "+Wpredict.distance(Wpredict,pos));
-                if(centroidZ!=pos.z){
+                if(centroidZ!=pos.z&&k==1){
                     System.out.println("FLOOR MISMATCHED!");
                     misMatch++;
+                    wrongFloor[k]++;
                 }
                 error[k]+=predict.distance(predict,pos);
                 WeightError[k]+=Wpredict.distance(Wpredict,pos);
@@ -153,6 +152,9 @@ public class errorAnalysis {
         for(int i=1;i<error.length;i++){
             double Wavg = WeightError[i]/n;
             System.out.println("Mean error distance (weighted) of k= "+(i)+" : "+Wavg);
+        }
+        for(int i=1;i<wrongFloor.length;i++){
+            System.out.println("Number of mismatched floor in k= "+(i)+" : "+wrongFloor[i]);
         }
     System.out.println(misMatch+" of prediction have floor mismatched, out of "+numberOfPrediction+" predictions");
     }

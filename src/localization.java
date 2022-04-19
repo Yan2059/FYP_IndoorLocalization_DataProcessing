@@ -14,7 +14,7 @@ public class localization {
     }
 
     static void readCSV() throws IOException {
-        File filename = new File("./2_3F_data_wName.csv");
+        File filename = new File("./2_3F_data_wName.csv");//name of database file
         InputStreamReader reader = new InputStreamReader(new FileInputStream(filename));
         BufferedReader br = new BufferedReader(reader);
         br.readLine();
@@ -54,7 +54,7 @@ public class localization {
 
     public static void main(String[] args) throws IOException {
         readCSV();
-        File file = new File("./316855438761981.csv");
+        File file = new File("./316849658899322.csv");//name of checkpoint file
             InputStreamReader reader = new InputStreamReader(new FileInputStream(file));
             BufferedReader br = new BufferedReader(reader);
             int lineNum = 0;
@@ -75,7 +75,7 @@ public class localization {
             }
             checkPoint.sortByWifiID();
             br.close();
-            int k=3;
+            int k=3;//modify of K in KNN and WKNN
                 double centroidX = 0, centroidY = 0, centroidZ = 0;
                 double WcentroidX = 0, WcentroidY = 0, WcentroidZ = 0;
                 double denom=0;
@@ -83,6 +83,9 @@ public class localization {
 
                 for(int i = 0; i < k; i++){
                     double dist = pointList.get(i).distance(checkPoint)/10000;
+                    if(dist<1){
+                        k=1;//handling very small dist, which cause error
+                    }
                     centroidX += pointList.get(i).location.x;
                     centroidY += pointList.get(i).location.y;
                     centroidZ += pointList.get(i).location.z;

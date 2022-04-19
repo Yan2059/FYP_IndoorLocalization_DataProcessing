@@ -7,6 +7,8 @@ class appendWifiList {
 
     private static ArrayList<Wifi> wifiList = new ArrayList<>();
     private static double x,y,z;
+    static File dbFile =new File("./db_no13.csv"); //name of database file to be generate or append
+    static File pointFolder = new File("./input_no13"); //name of folder storing the datapoint files
 
     static void readData(File file) throws IOException{
             InputStreamReader reader = new InputStreamReader(new FileInputStream(file));
@@ -30,16 +32,14 @@ class appendWifiList {
     }
 
     public static void main(String[] args) throws IOException{
-        File filename = new File("./input");
-        File[] folder = filename.listFiles();
+        File[] folder = pointFolder.listFiles();
         for(File dPfile: folder){
             String name = dPfile.getName();
             readData(dPfile);
             Collections.sort(wifiList, Collections.reverseOrder());
-            File file =new File("./2_3F_data_wName.csv");
             StringBuilder sb = new StringBuilder();
-            if(!file.exists()){
-                file.createNewFile();
+            if(!dbFile.exists()){
+                dbFile.createNewFile();
                 sb.append("x coordinate");
                 sb.append(',');
                 sb.append("y coordinate");
@@ -68,15 +68,13 @@ class appendWifiList {
                 sb.append('\n');
             }
             //Here true is to append the content to file
-            FileWriter fw = new FileWriter(file,true);
+            FileWriter fw = new FileWriter(dbFile,true);
             //BufferedWriter writer give better performance
             BufferedWriter bw = new BufferedWriter(fw);
             bw.write(sb.toString());
             //Closing BufferedWriter Stream
             bw.close();
             wifiList.clear();
-            System.out.println("Data successfully appended at the end of file");
-            System.out.println(sb.toString().getBytes());
         }
 
 
